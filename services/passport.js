@@ -9,10 +9,9 @@ passport.serializeUser((userm, done) => {
   done(null, userm.id);
 });
 
-passport.deserializeUser((id,done)=>{
-  User.findById(id)
-  .then(user=>{
-    done(null,user);
+passport.deserializeUser((id, done) => {
+  User.findById(id).then(user => {
+    done(null, user);
   });
 });
 
@@ -21,9 +20,9 @@ passport.use(
     {
       clientID: keys.googleClientID,
       clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback',
+      callbackURL:
+        'https://damp-oasis-24984.herokuapp.com/auth/google/callback',
       proxy: true
-      
     },
     (accessToken, refreshToken, profile, done) => {
       User.findOne({ googleID: profile.id }).then(existingUser => {
@@ -33,7 +32,7 @@ passport.use(
           done(null, existingUser);
         } else {
           new User({ googleID: profile.id })
-          // we don't have a user record with this ID, make one
+            // we don't have a user record with this ID, make one
 
             .save()
             .then(userm => done(null, userm));
