@@ -5,13 +5,16 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "npm run start --prefix client"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "concurrently": "^3.6.1",
     "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.3",
+    "materialize-css": "^0.100.2",
     "mongoose": "^5.2.4",
     "nodemon": "^1.18.3",
     "passport": "^0.4.0",
