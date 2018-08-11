@@ -3,14 +3,14 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 
-const userm = mongoose.model('userm');
+const User = mongoose.model('userm');
 
 passport.serializeUser((userm, done) => {
   done(null, userm.id);
 });
 
 passport.deserializeUser((id,done)=>{
-  userm.findById(id)
+  User.findById(id)
   .then(user=>{
     done(null,user);
   });
@@ -26,11 +26,15 @@ passport.use(
       
     },
     (accessToken, refreshToken, profile, done) => {
-      userm.findOne({ googleID: profile.id }).then(existingUser => {
+      User.findOne({ googleID: profile.id }).then(existingUser => {
         if (existingUser) {
+          // we have a user record with the given profile
+
           done(null, existingUser);
         } else {
-          new userm({ googleID: profile.id })
+          new User({ googleID: profile.id })
+          // we don't have a user record with this ID, make one
+
             .save()
             .then(userm => done(null, userm));
         }
